@@ -1,0 +1,342 @@
+Stator Inter-Turn Fault Diagnosis
+LITILI WAISALE (S11136630); JIUTA TAMATA (S11146508)
+
+close all, clear all, clc
+
+opts = delimitedTextImportOptions("NumVariables", 6);
+
+% Specify range and delimiter
+opts.DataLines = [6, Inf];
+opts.Delimiter = ",";
+
+% Specify column names and types
+opts.VariableNames = ["Phase A", "Phase B", "Phase C","Id","Iq","Ip"];
+opts.VariableTypes = ["double", "double", "double","double", "double", "double"];
+opts.VariableNamingRule = 'preserve';
+
+% Specify file level properties
+opts.ExtraColumnsRule = "ignore";
+opts.EmptyLineRule = "read";
+
+
+% Import the data
+PCAset1Load = readtable("PCAset1_100Load .csv", opts) % LOADING DATASET
+
+13 Statistical feature calculation
+T0 = table2array(PCAset1Load(:,6))
+T1 = table2array(PCAset1Load(1:30005,6))
+T2 = table2array(PCAset1Load(30006:60010,6))
+T3 = table2array(PCAset1Load(60011:90015,6))
+T4 = table2array(PCAset1Load(90016:120020,6))
+T5 = table2array(PCAset1Load(120021:150022,6))
+dude0=T0'
+dude1=T1'
+dude2=T2'
+dude3=T3'
+dude4=T4'
+dude5=T5'
+top0=buffer(dude0,100)
+top1=buffer(dude1,100)
+top2=buffer(dude2,100)
+top3=buffer(dude3,100)
+top4=buffer(dude4,100)
+top5=buffer(dude5,100)
+[buzz0,woody0]=size(top0)
+[buzz1,woody1]=size(top1)
+[buzz2,woody2]=size(top2)
+[buzz3,woody3]=size(top3)
+[buzz4,woody4]=size(top4)
+[buzz5,woody5]=size(top5)
+hoe0=top0'
+hoe1=top1'
+hoe2=top2'
+hoe3=top3'
+hoe4=top4'
+hoe5=top5'
+% subplot(6,1,1)
+% plot(hoe0(31,:))
+% subplot(6,1,2)
+% plot(hoe0(32,:))
+% subplot(6,1,3)
+% plot(hoe0(33,:))
+% subplot(6,1,4)
+% plot(hoe0(40,:))
+% subplot(6,1,5)
+% plot(hoe0(41,:))
+% subplot(6,1,6)
+% plot(hoe0(42,:))
+
+
+for i=1:100
+    
+   F1(i)=mean(top0(i,:));
+   F2(i)=max(top0(i,:));
+   F3(i)=rms(top0(i,:));
+   F4(i)=(sum(sqrt(abs((top0(i,:))))/numel(top0(i,:))))^2;
+   F5(i)=std(top0(i,:));
+   F6(i)=var(top0(i,:));
+   F7(i)=F3(i)/(sum(abs(top0(i,:))/numel(top0(i,:))));
+   F8(i)=F4(i)/(sum(abs(top0(i,:))/numel(top0(i,:))));
+   F9(i)=F2(i)/F3(i);
+   F10(i)=F2(i)/F4(i);
+   F11(i)=F2(i)/(sum(abs(top0(i,:))/numel(top0(i,:))));
+   F12(i)=skewness(top0(i,:));
+   F13(i)=kurtosis(top0(i,:));
+      F1a(i)=mean(top1(i,:));
+   F2a(i)=max(top1(i,:));
+   F3a(i)=rms(top1(i,:));
+   F4a(i)=(sum(sqrt(abs((top1(i,:))))/numel(top1(i,:))))^2;
+   F5a(i)=std(top1(i,:));
+   F6a(i)=var(top1(i,:));
+   F7a(i)=F3a(i)/(sum(abs(top1(i,:))/numel(top1(i,:))));
+   F8a(i)=F4a(i)/(sum(abs(top1(i,:))/numel(top1(i,:))));
+   F9a(i)=F2a(i)/F3a(i);
+   F10a(i)=F2a(i)/F4a(i);
+   F11a(i)=F2a(i)/(sum(abs(top1(i,:))/numel(top1(i,:))));
+   F12a(i)=skewness(top1(i,:));
+   F13a(i)=kurtosis(top1(i,:));
+      F1b(i)=mean(top2(i,:));
+   F2b(i)=max(top2(i,:));
+   F3b(i)=rms(top2(i,:));
+   F4b(i)=(sum(sqrt(abs((top2(i,:))))/numel(top2(i,:))))^2;
+   F5b(i)=std(top2(i,:));
+   F6b(i)=var(top2(i,:));
+   F7b(i)=F3b(i)/(sum(abs(top2(i,:))/numel(top2(i,:))));
+   F8b(i)=F4b(i)/(sum(abs(top2(i,:))/numel(top2(i,:))));
+   F9b(i)=F2b(i)/F3b(i);
+   F10b(i)=F2b(i)/F4b(i);
+   F11b(i)=F2b(i)/(sum(abs(top2(i,:))/numel(top2(i,:))));
+   F12b(i)=skewness(top2(i,:));
+   F13b(i)=kurtosis(top2(i,:));
+      F1c(i)=mean(top3(i,:));
+   F2c(i)=max(top3(i,:));
+   F3c(i)=rms(top3(i,:));
+   F4c(i)=(sum(sqrt(abs((top3(i,:))))/numel(top3(i,:))))^2;
+   F5c(i)=std(top3(i,:));
+   F6c(i)=var(top3(i,:));
+   F7c(i)=F3c(i)/(sum(abs(top3(i,:))/numel(top3(i,:))));
+   F8c(i)=F4c(i)/(sum(abs(top3(i,:))/numel(top3(i,:))));
+   F9c(i)=F2c(i)/F3c(i);
+   F10c(i)=F2c(i)/F4c(i);
+   F11c(i)=F2c(i)/(sum(abs(top3(i,:))/numel(top3(i,:))));
+   F12c(i)=skewness(top3(i,:));
+   F13c(i)=kurtosis(top3(i,:));
+      F1d(i)=mean(top0(i,:));
+   F2d(i)=max(top4(i,:));
+   F3d(i)=rms(top4(i,:));
+   F4d(i)=(sum(sqrt(abs((top4(i,:))))/numel(top4(i,:))))^2;
+   F5d(i)=std(top4(i,:));
+   F6d(i)=var(top4(i,:));
+   F7d(i)=F3d(i)/(sum(abs(top4(i,:))/numel(top4(i,:))));
+   F8d(i)=F4d(i)/(sum(abs(top4(i,:))/numel(top4(i,:))));
+   F9d(i)=F2d(i)/F3d(i);
+   F10d(i)=F2d(i)/F4d(i);
+   F11d(i)=F2d(i)/(sum(abs(top4(i,:))/numel(top4(i,:))));
+   F12d(i)=skewness(top4(i,:));
+   F13d(i)=kurtosis(top4(i,:));
+      F1e(i)=mean(top5(i,:));
+   F2e(i)=max(top5(i,:));
+   F3e(i)=rms(top5(i,:));
+   F4e(i)=(sum(sqrt(abs((top5(i,:))))/numel(top5(i,:))))^2;
+   F5e(i)=std(top5(i,:));
+   F6e(i)=var(top5(i,:));
+   F7e(i)=F3e(i)/(sum(abs(top5(i,:))/numel(top5(i,:))));
+   F8e(i)=F4e(i)/(sum(abs(top5(i,:))/numel(top5(i,:))));
+   F9e(i)=F2e(i)/F3e(i);
+   F10e(i)=F2e(i)/F4e(i);
+   F11e(i)=F2e(i)/(sum(abs(top5(i,:))/numel(top5(i,:))));
+   F12e(i)=skewness(top5(i,:));
+   F13e(i)=kurtosis(top5(i,:));
+
+
+end
+
+F1
+F2
+F3
+F4
+F5
+F6
+F7
+F8
+F9
+F10
+F11
+F12
+F13
+F1a
+F2a
+F3a
+F4a
+F5a
+F6a
+F7a
+F8a
+F9a
+F10a
+F11a
+F12a
+F13a
+F1b
+F2b
+F3b
+F4b
+F5b
+F6b
+F7b
+F8b
+F9b
+F10b
+F11b
+F12b
+F13b
+F1c
+F2c
+F3c
+F4c
+F5c
+F6c
+F7c
+F8c
+F9c
+F10c
+F11c
+F12c
+F13c
+F1d
+F2d
+F3d
+F4d
+F5d
+F6d
+F7d
+F8d
+F9d
+F10d
+F11d
+F12d
+F13d
+F1e
+F2e
+F3e
+F4e
+F5e
+F6e
+F7e
+F8e
+F9e
+F10e
+F11e
+F12e
+F13e
+
+vbls = {'Mean','Max value','RMS','SMR','Standard deviation','Variance','Shape Vector RMS','Shape Vector SMR','Crest factor','Latitude factor','Impulse factor' ,'skewness','kurtosis'}
+T = table(F1',F2',F3',F4',F5',F6',F7',F8',F9',F10',F11',F12',F13','VariableNames',vbls) %Combined classes
+T1 = table(F1a',F2a',F3a',F4a',F5a',F6a',F7a',F8a',F9a',F10a',F11a',F12a',F13a','VariableNames',vbls) %Healthy Class
+T2 = table(F1b',F2b',F3b',F4b',F5b',F6b',F7b',F8b',F9b',F10b',F11b',F12b',F13b','VariableNames',vbls) %0.3% Severity
+T3 = table(F1c',F2c',F3c',F4c',F5c',F6c',F7c',F8c',F9c',F10c',F11c',F12c',F13c','VariableNames',vbls) %0.7% Severity
+T4 = table(F1d',F2d',F3d',F4d',F5d',F6d',F7d',F8d',F9d',F10d',F11d',F12d',F13d','VariableNames',vbls) %1.05% Severity
+T5 = table(F1e',F2e',F3e',F4e',F5e',F6e',F7e',F8e',F9e',F10e',F11e',F12e',F13e','VariableNames',vbls) %2.1% Severity
+
+
+
+
+Computing PCA for each Classes
+Combined Class
+Data_array = table2array(T); % convert the table into an array
+normalizedData = zscore(Data_array); % standazing data
+[coeff,score,latent,tsquared,explained]= pca(normalizedData) % performs PCA
+Healthy Class
+
+Data_array1 = table2array(T1); % convert the table into an array
+normalizedData1 = zscore(Data_array1); % standazing data
+[coeff1,score1,latent1,tsquared1,explained1]= pca(normalizedData1); % performs PCA
+Faulty 0.3% Severity
+
+Data_array2 = table2array(T2); % convert the table into an array
+normalizedData2 = zscore(Data_array2); % standazing data
+[coeff2,score2,latent2,tsquared2,explained2]= pca(normalizedData2); % performs PCA
+Faulty 0.7% Severity
+
+Data_array3 = table2array(T3); % convert the table into an array
+normalizedData3 = zscore(Data_array3); % standazing data
+[coeff3,score3,latent3,tsquared3,explained3]= pca(normalizedData3); % performs PCA
+Faulty 1.05% severity
+
+Data_array4 = table2array(T4); % convert the table into an array
+normalizedData4 = zscore(Data_array4); % standazing data
+[coeff4,score4,latent4,tsquared4,explained4]= pca(normalizedData4); % performs PCA
+Faulty 2.1% Severity
+
+Data_array5 = table2array(T5); % convert the table into an array
+normalizedData5 = zscore(Data_array5); % standazing data
+[coeff5,score5,latent5,tsquared5,explained5]= pca(normalizedData5); % performs PCA
+
+2D Plot
+figure (1)
+scatter(score1(:,1),score1(:,2),'o','MarkerEdgeColor','flat') % healthy
+ hold on
+ scatter(score2(:,1),score2(:,2),'o','MarkerEdgeColor','flat') % Faulty - 0.3%
+hold on
+scatter(score3(:,1),score3(:,2),'o','MarkerEdgeColor','flat') % Faulty - 0.7%
+hold on
+scatter(score4(:,1),score4(:,2),'o','MarkerEdgeColor','flat') % Faulty - 1.05%
+hold on
+scatter(score5(:,1),score5(:,2),'o','MarkerEdgeColor','flat'), hold off % Faulty - 2.1%
+xlabel("PC 1"),ylabel("PC 2")
+legend('Healthy','Faulty - 0.3%','Faulty - 0.7%','Faulty - 1.05%','Faulty - 2.1%',"Location","Northwest")
+
+
+3D Plot
+figure(2)
+scatter3(score1(:,1),score1(:,2),score5(:,3),'o','MarkerEdgeColor','flat') % healthy
+ hold on
+ scatter3(score2(:,1),score2(:,2),score5(:,3),'o','MarkerEdgeColor','flat') % Faulty - 0.3%
+hold on
+scatter3(score3(:,1),score3(:,2),score5(:,3),'o','MarkerEdgeColor','flat') % Faulty - 0.7%
+hold on
+scatter3(score4(:,1),score4(:,2),score5(:,3),'o','MarkerEdgeColor','flat') % Faulty - 1.05%
+hold on
+scatter3(score5(:,1),score5(:,2),score5(:,3),'o','MarkerEdgeColor','flat'), hold off % Faulty - 2.1%
+xlabel("PC 1"),ylabel("PC 2")
+legend('Healthy','Faulty - 0.3%','Faulty - 0.7%','Faulty - 1.05%','Faulty - 2.1%',"Location","Northwest")
+
+
+Pareto Plot
+figure (3)
+pareto(explained,1) 
+ xlabel("Intrinsic dimensions"), ylabel("% Variance")
+
+T-SNE
+rng default % for fair comparison
+Y1 = tsne(Data_array1,"Distance","chebychev","Algorithm","barneshut");
+Y2 = tsne(Data_array2,"Distance","chebychev","Algorithm","barneshut");
+Y3 = tsne(Data_array3,"Distance","chebychev","Algorithm","barneshut");
+Y4 = tsne(Data_array4,"Distance","chebychev","Algorithm","barneshut");
+Y5 = tsne(Data_array5,"Distance","chebychev","Algorithm","barneshut");
+
+figure(3)
+scatter(Y1(:,1),Y1(:,2),'filled');
+hold on
+scatter(Y2(:,1),Y2(:,2),'filled');
+hold on
+scatter(Y3(:,1),Y3(:,2),'filled');
+hold on
+scatter(Y4(:,1),Y4(:,2),'filled');
+hold on
+scatter(Y5(:,1),Y5(:,2),'filled');
+legend('Healthy','Faulty - 0.3%','Faulty - 0.7%','Faulty - 1.05%','Faulty - 2.1%',"Location","Northwest")
+hold off
+
+figure(4)
+scatter3(Y1(:,1),Y1(:,2),Y1(:,3),'filled');
+hold on
+scatter3(Y2(:,1),Y2(:,2),Y2(:,3),'filled');
+hold on
+scatter3(Y3(:,1),Y3(:,2),Y3(:,3),'filled');
+hold on
+scatter3(Y4(:,1),Y4(:,2),Y4(:,3),'filled');
+hold on
+scatter3(Y5(:,1),Y5(:,2),Y5(:,3),'filled');
+legend('Healthy','Faulty - 0.3%','Faulty - 0.7%','Faulty - 1.05%','Faulty - 2.1%',"Location","Northwest")
+hold off
